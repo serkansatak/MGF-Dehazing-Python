@@ -1,0 +1,14 @@
+---
+ST          : 1
+threshold   : 0.05
+res1        : [360, 640]
+res0        : [720, 1280]
+r           : 16
+rr          : 1
+height      : 36
+width       : 64
+time        : 0
+nFrames     : 1
+gamma       : 1
+eps         : 0.04
+r1          : 4
