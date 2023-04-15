@@ -5,9 +5,9 @@ from numpy import matlib
 
 def getImagePyramid(frame):
     images = []
-    images.append(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) / 255.)
+    images.append(cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY))
     for i in range(3):
-        images.append(cv2.pyrDown(images[-1]) / 255.)
+        images.append(cv2.pyrDown(images[-1]))
     return images
 
 
@@ -47,6 +47,8 @@ def maxk(mat: np.ndarray, dim: int, k: int) -> np.ndarray:
     Sorts ndarrays along 'dim' dimension and 
     returns 'k' number of maximums for each.
     """
+    mat = mat.flatten('F')[:,np.newaxis]
+    
     # Sort the matrix along the specified dimension and get the indices
     indices = np.argsort(mat, axis=dim)
     # Get the indices of the maximum k values along the specified dimension
@@ -116,8 +118,8 @@ def fast_gradient(im:np.ndarray, p: np.ndarray, N: np.ndarray, N1: np.ndarray, a
     
     eps = args.eps ** 2
     
-    s_end = im.shape[:2]
-    s_start = (args.height, args.width)
+    s_end = tuple(reversed(im.shape[:2]))
+    s_start = (args.width, args.height)
 
     im_sub = cv2.resize(im, s_start, interpolation=cv2.INTER_NEAREST) # NN is often enough
     p_sub = cv2.resize(p, s_start, interpolation=cv2.INTER_NEAREST)
@@ -137,7 +139,7 @@ def fast_gradient(im:np.ndarray, p: np.ndarray, N: np.ndarray, N1: np.ndarray, a
     # the size of each local patch; N=(2r+1)^2 except for boundary pixels.
     
     mean_im1 = np.divide(boxfilter(im_sub, args.r1), N1)
-    mean_imim1 = np.divide(boxfilter(np.multiply(im,im), args.r1), N1)
+    mean_imim1 = np.divide(boxfilter(np.multiply(im_sub,im_sub), args.r1), N1)
     var_im1 = mean_imim1 - np.multiply(mean_im1, mean_im1)
     
     chi_im = np.sqrt(np.abs(var_im1, var_im))
@@ -197,7 +199,8 @@ def pyramid_dehazing(rgb, im0, im1, im2, args, A=None):
     
     # Level 1
     t1_raw = cv2.resize(t2, r1, interpolation = cv2.INTER_LINEAR)
-    t1_final = fast_gradient(im1,t1_raw, N, NN)
+    print(t1_raw)
+    t1_final = fast_gradient(im1,t1_raw, N, NN, args)
     t1_final = np.maximum(t1_final, 0.05)
     
     m, n = t1_final.shape[:2]
@@ -207,9 +210,9 @@ def pyramid_dehazing(rgb, im0, im1, im2, args, A=None):
     t0_raw = cv2.resize(t1_final, r0, interpolation = cv2.INTER_LINEAR)
     t0_rough = t0_raw.copy()
     
-    t0 = fast_gradient(im0, t0_raw, N, NN)
+    t0 = fast_gradient(im0, t0_raw, N, NN, args)
     t0 = np.maximum(t0, 0.05)
     
     # Haze-free image
-    result = np.multiply(rgb-A, t0) - A 
+    result = np.multiply(rgb-A, np.repeat(t0[:,:,np.newaxis], 3, axis=2)) - A
     return result, t0_rough, A

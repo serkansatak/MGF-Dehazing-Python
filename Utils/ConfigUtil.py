@@ -10,8 +10,8 @@ def parseParams():
     
     parser = argparse.ArgumentParser(description="MGF Dehazing Python Parameters.")
     
-    parser.add_argument("--input", required=True, type=str, help="Input video path that is going to be dehazed.")
-    parser.add_argument("--output", required=True, type=str, help="Output video path.")
+    parser.add_argument("--input",  type=str, default="../MGF_dehazing/Data/Ship_input/", help="Input video path or sequence dir that is going to be dehazed.")
+    parser.add_argument("--output", default="../MGF_dehazing/Output/Ship_proposed/", type=str, help="Output video path.")
     
     args = parser.parse_args()
     
@@ -22,6 +22,6 @@ def parseParams():
         setattr(args, key, value)
         
     setattr(args, 'N', boxfilter(np.ones((args.height, args.width), dtype=np.float32), args.r))
-    setattr(args, 'N', boxfilter(np.ones((args.height, args.width), dtype=np.float32), args.rr))
+    setattr(args, 'NN', boxfilter(np.ones((args.height, args.width), dtype=np.float32), args.rr))
         
     return args

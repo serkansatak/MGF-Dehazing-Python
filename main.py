@@ -6,15 +6,14 @@ def main():
     
     print(args)
     
-    processor = ProcessorMGF(configArgs=args, src=args.input, out=args.output)
-    
-    processor.initializeMGF()
+    processor = ProcessorMGF(configArgs=args, src=args.input, out=args.output)    
     processor.operator = processor.operationMGF
     
     processor.printAttributes()
     
     print("Starting process...")
-    processor.processVideo()
+    processor.processSequence()
+    processor.printAttributes
     
     
 if __name__ == "__main__":
