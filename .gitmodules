@@ -1,3 +1,4 @@
 [submodule "ThreadedVideoProcessing"]
 	path = ThreadedVideoProcessing
 	url = https://github.com/serkansatak/ThreadedVideoProcessing
+	branch = main
