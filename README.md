@@ -2,7 +2,7 @@
 
 Codebase for the reimplemented of the focus [paper](https://rdcu.be/cTCIV).
 
-\***Impotant Note**\*
+## \*Impotant Note\*
 
   This code is not working properly right now. I decided to publish this for a starting point for those who want to implement [MGF-Dehazing](https://github.com/viengiaan/MGF_dehazing) in Python. 
 
