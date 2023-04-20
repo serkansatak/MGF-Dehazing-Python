@@ -32,4 +32,4 @@ This code was tested on below requirements but it is possible that it works in o
 
 1. Finding exact equivalents of MATLAB functions
 2. OpenCV-GPU for faster processing
-3. Reimplementation with Kornia
+3. Reimplementation with [Kornia](https://github.com/kornia/kornia) for larger images.
